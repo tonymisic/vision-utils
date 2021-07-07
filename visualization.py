@@ -2,6 +2,11 @@ import torch, seaborn as sns, maths
 from sklearn.manifold import TSNE
 class Visualization:
     ''' Class containing tensor visualization methods
+    TODO: 
+    - cross-modal class distribution distance
+    - run all functions on raw dataset
+    - distance of class mean to all other classes.
+    - 
     '''
     def flatten_data(data, spatial_labels, temporal_labels):
         augmented = torch.zeros([data.size(0) * data.size(1), data.size(2)])
