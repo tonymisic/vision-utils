@@ -3,7 +3,6 @@ from sklearn.manifold import TSNE
 class Visualization:
     ''' Class containing tensor visualization methods
     '''
-    # convert data, temporal_label, label -> data, labels
     def flatten_data(data, spatial_labels, temporal_labels):
         augmented = torch.zeros([data.size(0) * data.size(1), data.size(2)])
         labels = torch.zeros([data.size(0) * data.size(1)])
@@ -14,7 +13,6 @@ class Visualization:
                     labels[i * data.size(1) + j] = spatial_labels[i]
         return augmented, labels
 
-    # t-SNE of a data (samples, size) and labels (samples)
     def tsne(self, data, labels, savefile="tsne.jpg", n_comps=2, n_iters=250):
         assert data.size(0) == labels.size(0)
         t = TSNE(n_components=n_comps, n_iter=n_iters)
@@ -24,14 +22,17 @@ class Visualization:
         figure.savefig(savefile)
         print("Saved t-SNE visualization to: " + savefile)
     
-    # Visualize per class "spread"
-    def per_class_variance(data, labels, num_classes, savefile="var.jpg", amplitude=1):
+    def per_class_variance(data, labels, num_classes):
         assert data.size(0) == labels.size(0)
         variances = []
         # organize data into classes
         for sample in range(num_classes):
             variances.append(float(maths.variance(maths.variance(data[labels == sample]))))
+        return variances
+    
+    def visualize_variances(variances, savefile="var.jpg"):
         plot = sns.barplot(x=torch.range(0, len(variances) - 1, dtype=int).tolist(), y=variances)
         figure = plot.get_figure()
         figure.savefig(savefile)
         print("Saved Class Variance visualization to: " + savefile)
+

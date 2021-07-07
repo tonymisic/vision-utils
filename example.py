@@ -13,4 +13,5 @@ temporal_labels[1, 3:9] = 1
 temporal_labels[2, 2:7] = 1
 spatial_labels = torch.Tensor([3, 1, 2])
 data, labels = Visualization.flatten_data(sample_audio, spatial_labels, temporal_labels)
-Visualization.per_class_variance(data, labels, 4)
+variances = Visualization.per_class_variance(data, labels, 4)
+Visualization.visualize_variances(variances)
