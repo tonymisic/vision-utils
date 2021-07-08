@@ -1,12 +1,10 @@
+import h5py, numpy as np
 import torch, seaborn as sns, maths
 from sklearn.manifold import TSNE
 class Visualization:
     ''' Class containing tensor visualization methods
     TODO: 
     - cross-modal class distribution distance
-    - run all functions on raw dataset
-    - distance of class mean to all other classes.
-    - 
     '''
     def flatten_data(data, spatial_labels, temporal_labels):
         augmented = torch.zeros([data.size(0) * data.size(1), data.size(2)])
@@ -15,10 +13,12 @@ class Visualization:
             for j in range(data.size(1)): # 10
                 augmented[i * data.size(1) + j] = data[i, j]
                 if temporal_labels[i, j] == 1:
-                    labels[i * data.size(1) + j] = spatial_labels[i]
+                    labels[i * data.size(1) + j] = torch.max(spatial_labels[i, j], dim=0).indices
+                else:
+                    labels[i * data.size(1) + j] = 28
         return augmented, labels
 
-    def tsne(self, data, labels, savefile="tsne.jpg", n_comps=2, n_iters=250):
+    def tsne(data, labels, savefile="tsne.jpg", n_comps=2, n_iters=250):
         assert data.size(0) == labels.size(0)
         t = TSNE(n_components=n_comps, n_iter=n_iters)
         x = t.fit_transform(X=data)
@@ -41,3 +41,21 @@ class Visualization:
         figure.savefig(savefile)
         print("Saved Class Variance visualization to: " + savefile)
 
+    # distance between distributions per class
+    def bhattacharyya_distances(data, labels, classes, amplitude=0.1):
+        distances = []
+        for i in range(classes):
+            temp = []
+            for j in range(classes):
+                if i == j:
+                    temp.append(0)
+                else:
+                    temp.append(float(maths.bhattacharyya(data[labels == i], data[labels == j])) + amplitude)
+            distances.append(temp)
+        return distances
+    
+    def visualize_bhattacharyya(distances, savefile="bhatt.jpg"):
+        plot = sns.heatmap(data=distances)
+        figure = plot.get_figure()
+        figure.savefig(savefile)
+        print("Saved Bhattacharyya visualization to: " + savefile)

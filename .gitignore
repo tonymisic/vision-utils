@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .vscode/
+AVE_Dataset/
 # C extensions
 *.so
 
