@@ -8,7 +8,7 @@ class FastAVE(Dataset):
         self.root_dir = root_dir
         self.split = split
         self.spatial_labels = self.data_from_file(root_dir + 'labels.h5')
-        self.temporal_labels = self.data_from_file(root_dir + 'temporal_labels.h5')
+        self.temporal_labels = self.data_from_file(root_dir + 'labels_closs.h5')
         self.audio_features = self.data_from_file(root_dir + 'audio_feature.h5')
         self.video_features = self.data_from_file(root_dir + 'visual_feature.h5')
         if split == 'train':

@@ -3,7 +3,7 @@ import torch, seaborn as sns, maths
 from sklearn.manifold import TSNE
 class Visualization:
     ''' Class containing tensor visualization methods
-    TODO: 
+    TODO:
     - cross-modal class distribution distance
     '''
     def flatten_data(data, spatial_labels, temporal_labels):
@@ -42,7 +42,7 @@ class Visualization:
         print("Saved Class Variance visualization to: " + savefile)
 
     # distance between distributions per class
-    def bhattacharyya_distances(data, labels, classes, amplitude=0.1):
+    def bhattacharyya_distances(data, labels, classes, visual_correction=0.1):
         distances = []
         for i in range(classes):
             temp = []
@@ -50,7 +50,7 @@ class Visualization:
                 if i == j:
                     temp.append(0)
                 else:
-                    temp.append(float(maths.bhattacharyya(data[labels == i], data[labels == j])) + amplitude)
+                    temp.append(float(maths.bhattacharyya(data[labels == i], data[labels == j])) + visual_correction)
             distances.append(temp)
         return distances
     
